@@ -1,14 +1,20 @@
 class day():
-    def nextday(self):
-        a = True
+    def __init__(self):
         self.day = 1
-        if a == True:
-            self.day = self.day + 1
-            return ("Day %d" %self.day)
+
+    def nextday(self):
+        self.day += 1
 
     def daypercent(self):
-        self.percent = self.day/40*100
-        return str(self.percent)+"%"
+        self.percent = str(self.day/40*100)+"%"
+
+        return self.percent
+
+    def showday(self):
+
+        return ("Day %d" %self.day)
+
+
 
 
 
