@@ -40,13 +40,13 @@ class AvoidGame():
         character_y_pos = self.screen_height - character_height  # 화면 세로 크기 가장 아래
 
         # 점수 아이템 불러오기
-        point = images.heartImg
+        point = images.Aobj
         point_width = point.get_rect().size[0]  # 가로 크기
         point_x_pos = random.randint(0, self.screen_width - point_width)  # 화면 가로의 랜덤 위치
         point_y_pos = self.screen_height + 1
 
         # 꽝 아이템 불러오기
-        enemy = images.enemyImg
+        enemy = images.Fobj
         enemy_width = enemy.get_rect().size[0]  # 가로 크기
         enemy_x_pos = random.randint(0, self.screen_width - enemy_width)  # 화면 가로의 랜덤 위치
         enemy_y_pos = self.screen_height + 1
