@@ -2,22 +2,28 @@ import tkinter
 import tkinter.font
 from tkinter import*
 import random
+
+from PyQt5.QtWidgets import QApplication
+
 from Day import day
 from Ending import ending
 from action import Action
-
+import midtermtest
+import sys
 
 class KoominGochi():
 
     def __init__(self):
         #윈도우 창 띄우기
-        d = day()
+        self.d = day()
         self.act = Action()
         self.window = Tk()
         self.window.title("KoominGochi")
         self.window.geometry("600x800")
         #window.configure(bg='white')
         self.window.resizable(width=False, height=False)
+        self.app = QApplication(sys.argv)
+        self.test = midtermtest.MidTermTest(0)
 
         #장소 버튼들
         button_school = tkinter.Button(self.window, text='학교',width=8,height=2, fg="blue")
@@ -44,8 +50,7 @@ class KoominGochi():
         button_movie.place(x=440, y=560)
         button_shopping = tkinter.Button(self.window, text='쇼핑', width=6, height=2, fg="green", command= lambda: self.btn_clicked('shopping'))
         button_shopping.place(x=440, y=605)
-
-        button_sleep = tkinter.Button(self.window, text='자러가기', width=6, height=2, fg="black")
+        button_sleep = tkinter.Button(self.window, text='자러가기', width=6, height=2, fg="black", command= lambda: self.btn_clicked('sleep'))
         button_sleep.place(x=260, y=720)
 
         #쿠민이 이미지
@@ -89,11 +94,11 @@ class KoominGochi():
 
 
         #날짜
-        button_day = tkinter.Label(self.window, text=d.day,width=6)
-        button_day.place(x=0, y=12)
+        self.button_day = tkinter.Label(self.window, text=self.d.day,width=6)
+        self.button_day.place(x=0, y=12)
         #날짜 상태바
-        bar_day = tkinter.Button(self.window, text=d.daypercent(), width=10, bg='green')
-        bar_day.place(x=60, y=10)
+        self.bar_day = tkinter.Button(self.window, text=self.d.daypercent(), width=10, bg='green')
+        self.bar_day.place(x=60, y=10)
         '''
         # 엔딩 버튼 생성
         font = tkinter.font.Font(family='Consolas', size=100)
@@ -104,7 +109,8 @@ class KoominGochi():
 
     def btn_clicked(self, button):
         if button == 'lectureRoom':
-            self.act.goClass()
+            #self.act.goClass()
+            self.test.show()
         elif button == 'club':
             self.act.goClub()
         elif button == 'gym':
@@ -119,6 +125,9 @@ class KoominGochi():
             self.act.goMovie()
         elif button == 'shopping':
             self.act.goshop()
+        elif button == 'sleep':
+            self.act.gosleep()
+
 
         self.bar_hp['text'] = self.act.HP
         self.bar_intellect['text'] = self.act.int
@@ -126,6 +135,8 @@ class KoominGochi():
         self.bar_money['text'] = self.act.money
         self.bar_lonely['text'] = self.act.lon
         self.bar_stress['text'] = self.act.str
+        self.button_day['text'] = "Day "+ str(self.act.day)
+        self.bar_day['text'] = str(self.d.daypercent(self.act.day)) + "%"
 
 
 
@@ -141,3 +152,4 @@ class KoominGochi():
 
 if __name__ == "__main__":
     game = KoominGochi()
+    sys.exit(game.app.exec_())

@@ -4,12 +4,14 @@ from Day import day
 class Action():
 
     def __init__(self):
+        self.d = day()
         self.HP = 10
         self.int = 50
         self.char = 50
         self.lon= 50
         self.str = 50
         self.money = 10000
+        self.day = 1
     def goClub(self):
         if self.HP < 3:
             return "체력이 부족합니다"
@@ -89,7 +91,8 @@ class Action():
         self.money -= 1000
         self.lon += 5
         self.char -= 5
-        day.nextday()
+        self.day += 1
+        self.d.daypercent()
 
 
     def Gameover(self):
