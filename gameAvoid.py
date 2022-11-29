@@ -7,11 +7,11 @@ import images
 """
 ***수정할 것***
 1. 똥과 하트가 서로 겹쳐서 나오는 문제
-2. 오브젝트 수량 증가. 한 번에 여러 개가 내려오도록 (스크래치, 엔트리의 도장 찍기, 유니티의 오브젝트 풀)
+2. 오브젝트 수량 증가. 한 번에 여러 개가 내려오도록 (스크래치, 엔트리의 도장, 유니티의 오브젝트 풀)
 """
 
 
-class AvoidGame():
+class AvoidGame:
     def __init__(self):
         pygame.init()
         self.screen_width = 480

@@ -3,7 +3,7 @@ import sys
 import images
 
 
-class ClickGame():
+class ClickGame:
     def __init__(self):
         pygame.init()
         self.screen_width = 480
