@@ -10,7 +10,7 @@ class day():
 
     def daypercent(self, day):
         self.percent = day/40*100
-        return str(self.percent)+"%"
+        return self.percent
 
 
 

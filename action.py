@@ -92,7 +92,7 @@ class Action():
         self.lon += 5
         self.char -= 5
         self.day += 1
-        self.d.daypercent()
+        self.d.daypercent(self.day)
 
 
     def Gameover(self):
