@@ -3,6 +3,14 @@ import sys
 import images
 
 
+"""
+***수정할 것***
+- 해상도를 16:9 정도로 수정, 진짜 수강신청 사이트처럼 꾸미기
+
+***효과음? 브금?
+"""
+
+
 class ClickGame:
     def __init__(self):
         pygame.init()
@@ -18,6 +26,7 @@ class ClickGame:
 
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), flags=pygame.HIDDEN)
 
+    # 게임 실행할 때 호출해 줄 함수
     def set(self):
         self.setScore()
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), flags=pygame.SHOWN)

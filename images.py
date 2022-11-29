@@ -16,7 +16,7 @@ clearImg2 = pygame.image.load(fileLocation + "clear2.png")
 failImg1 = pygame.image.load(fileLocation + "fail1.png")
 failImg2 = pygame.image.load(fileLocation + "fail2.png")
 
-bgImg = pygame.image.load(fileLocation + "bg.png")
+bgImg = pygame.image.load(fileLocation + "kookminUniv.png")
 
 playerImg = pygame.image.load(fileLocation + "koominRun.png")
 Aobj = pygame.image.load(fileLocation + "Aobj.png")

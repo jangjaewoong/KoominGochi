@@ -6,8 +6,10 @@ import images
 
 """
 ***수정할 것***
-1. 똥과 하트가 서로 겹쳐서 나오는 문제
-2. 오브젝트 수량 증가. 한 번에 여러 개가 내려오도록 (스크래치, 엔트리의 도장, 유니티의 오브젝트 풀)
+- 게임 시작 시 매개변수 받음. 그 값에 따라 오브젝트 수량 증가를 통한 난이도 조절. 오브젝트 속도로도 난이도 조절 가능할지?
+    - 오브젝트 수량 증가에 따른 오브젝트 간 충돌 체크는 어떻게?
+
+***효과음? 브금?
 """
 
 
@@ -26,6 +28,7 @@ class AvoidGame:
 
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), flags=pygame.HIDDEN)
 
+    # 게임 실행할 때 호출해 줄 함수
     def set(self):
         self.setScore()
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), flags=pygame.SHOWN)
@@ -53,7 +56,7 @@ class AvoidGame:
         point = images.Aobj
         point_width = point.get_rect().size[0]  # 가로 크기
         point_x_pos = random.randint(0, self.screen_width - point_width)  # 화면 가로의 랜덤 위치
-        point_y_pos = -point_width
+        point_y_pos = -point_width * 4
 
         # 꽝 아이템
         enemy = images.Fobj
@@ -65,12 +68,14 @@ class AvoidGame:
         moveDir = 0
         # 캐릭터 속도
         character_speed = 0.5
-        obj_speed = 0.5
+        obj_speed = 1
+        moveLeft = False
+        moveRight = False
 
         # 시간 계산
         start_ticks = pygame.time.get_ticks()  # 시작 tick 받기
         # 게임 제한 시간
-        total_time = 10
+        total_time = 60
 
         score = 0
         running = True
@@ -83,14 +88,20 @@ class AvoidGame:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         self.quitGame()
-                    if event.type == pygame.KEYDOWN:  # 키 입력
+                    if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_LEFT:
-                            moveDir = -character_speed
-                        elif event.key == pygame.K_RIGHT:
-                            moveDir = character_speed
-                    elif event.type == pygame.KEYUP:  # 키 입력 종료
-                        if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                            moveDir = 0
+                            moveLeft = True
+                        if event.key == pygame.K_RIGHT:
+                            moveRight = True
+                    elif event.type == pygame.KEYUP:
+                        if event.key == pygame.K_LEFT:
+                            moveLeft = False
+                        if event.key == pygame.K_RIGHT:
+                            moveRight = False
+
+                if moveLeft: moveDir = -character_speed
+                if moveRight: moveDir = character_speed
+                if not moveLeft and not moveRight: moveDir = 0
 
                 character_x_pos += moveDir * dt  # 좌우 이동
 
@@ -105,7 +116,7 @@ class AvoidGame:
                     point_x_pos = random.randint(0, self.screen_width - point_width)
 
                 if enemy_y_pos > self.screen_height:
-                    enemy_y_pos = -50
+                    enemy_y_pos = -enemy_width
                     enemy_x_pos = random.randint(0, self.screen_width - enemy_width)
 
                 # rect정보 업데이트
@@ -121,7 +132,7 @@ class AvoidGame:
                 point_rect.left = point_x_pos
                 point_rect.top = point_y_pos
 
-                if enemy_rect.colliderect(point_rect):
+                if point_rect.colliderect(enemy_rect):
                     if enemy_y_pos >= point_y_pos:
                         point_x_pos = random.randint(0, self.screen_width - point_width)
                     else:
@@ -130,10 +141,10 @@ class AvoidGame:
                 # 아이템 충돌, 점수
                 if character_rect.colliderect(point_rect):
                     score += 1
-                    point_y_pos = -point_width
+                    point_y_pos = self.screen_height + 10
                 if character_rect.colliderect(enemy_rect):
                     score -= 1 if score > 0 else 0
-                    enemy_y_pos = -enemy_width
+                    enemy_y_pos = self.screen_height + 10
                 scoreTxt = self.game_font.render("점수: " + str(score), True, (0, 0, 0))
 
                 point_y_pos += obj_speed * dt  # 점수 아이템 하강
