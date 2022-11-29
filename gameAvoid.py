@@ -13,14 +13,24 @@ import images
 
 class AvoidGame():
     def __init__(self):
+        pygame.init()
         self.screen_width = 480
         self.screen_height = 640
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-
-        self.clock = pygame.time.Clock()
-        self.game_font = pygame.font.Font("NanumBarunGothic.ttf", 20)  # 폰트 객체 생성 (폰트(디폴트 값), 크기)
         self.centerPos = [(self.screen_width / 2), (self.screen_height / 2)]
+        pygame.display.set_caption("미니 게임")
+
+        self.game_font = pygame.font.Font("NanumBarunGothic.ttf", 20)  # 폰트 객체 생성 (폰트(디폴트 값), 크기)
+        self.clock = pygame.time.Clock()
+        self.clock.tick(60)
         self.score = 0
+
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), flags=pygame.HIDDEN)
+
+    def set(self):
+        self.setScore()
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), flags=pygame.SHOWN)
+
+        self.gamePlay()
 
     def quitGame(self):
         pygame.quit()
@@ -30,7 +40,7 @@ class AvoidGame():
         self.score = 0
 
     def gamePlay(self):
-        # 캐릭터, 배경 불러오기
+        # 캐릭터, 배경
         background = images.bgImg
 
         character = images.playerImg
@@ -39,22 +49,23 @@ class AvoidGame():
         character_x_pos = self.centerPos[0] - character_width / 2  # 화면 가로의 가운데 위치
         character_y_pos = self.screen_height - character_height  # 화면 세로 크기 가장 아래
 
-        # 점수 아이템 불러오기
+        # 점수 아이템
         point = images.Aobj
         point_width = point.get_rect().size[0]  # 가로 크기
         point_x_pos = random.randint(0, self.screen_width - point_width)  # 화면 가로의 랜덤 위치
-        point_y_pos = self.screen_height + 1
+        point_y_pos = -point_width
 
-        # 꽝 아이템 불러오기
+        # 꽝 아이템
         enemy = images.Fobj
         enemy_width = enemy.get_rect().size[0]  # 가로 크기
         enemy_x_pos = random.randint(0, self.screen_width - enemy_width)  # 화면 가로의 랜덤 위치
-        enemy_y_pos = self.screen_height + 1
+        enemy_y_pos = -enemy_width
 
         # 이동 방향
         moveDir = 0
         # 캐릭터 속도
         character_speed = 0.5
+        obj_speed = 0.5
 
         # 시간 계산
         start_ticks = pygame.time.get_ticks()  # 시작 tick 받기
@@ -83,21 +94,18 @@ class AvoidGame():
 
                 character_x_pos += moveDir * dt  # 좌우 이동
 
-                point_y_pos += 0.5 * dt  # 점수 아이템 하강
-                enemy_y_pos += 0.5 * dt  # 꽝 아이템 하강
-
-                # 캐릭터가 화면 밖으로 나가지 않도록
+                # 오브젝트가 화면 밖으로 나가지 않도록
                 if character_x_pos < 0:
                     character_x_pos = 0
                 elif character_x_pos > self.screen_width - character_width:
                     character_x_pos = self.screen_width - character_width
 
                 if point_y_pos > self.screen_height:
-                    point_y_pos = 0
+                    point_y_pos = -point_width
                     point_x_pos = random.randint(0, self.screen_width - point_width)
 
                 if enemy_y_pos > self.screen_height:
-                    enemy_y_pos = 0
+                    enemy_y_pos = -50
                     enemy_x_pos = random.randint(0, self.screen_width - enemy_width)
 
                 # rect정보 업데이트
@@ -113,14 +121,23 @@ class AvoidGame():
                 point_rect.left = point_x_pos
                 point_rect.top = point_y_pos
 
+                if enemy_rect.colliderect(point_rect):
+                    if enemy_y_pos >= point_y_pos:
+                        point_x_pos = random.randint(0, self.screen_width - point_width)
+                    else:
+                        enemy_y_pos = random.randint(0, self.screen_width - point_width)
+
                 # 아이템 충돌, 점수
                 if character_rect.colliderect(point_rect):
                     score += 1
-                    point_y_pos = self.screen_height + 1
+                    point_y_pos = -point_width
                 if character_rect.colliderect(enemy_rect):
                     score -= 1 if score > 0 else 0
-                    enemy_y_pos = self.screen_height + 1
+                    enemy_y_pos = -enemy_width
                 scoreTxt = self.game_font.render("점수: " + str(score), True, (0, 0, 0))
+
+                point_y_pos += obj_speed * dt  # 점수 아이템 하강
+                enemy_y_pos += obj_speed * dt  # 꽝 아이템 하강
 
                 # 게임 시간 및 타이머
                 elapsed_time = (pygame.time.get_ticks() - start_ticks) / 1000  # get_ticks() 단위: 밀리초
@@ -138,8 +155,8 @@ class AvoidGame():
                 self.screen.blit(scoreTxt, (10, 50))
                 pygame.display.update()  # 게임 화면 업데이트
 
-            if score > self.score:
-                self.score = score
+            self.score = score
+            self.screen = pygame.display.set_mode((self.screen_width, self.screen_height), flags=pygame.HIDDEN)
             return
 
 
