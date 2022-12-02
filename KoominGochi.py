@@ -29,9 +29,11 @@ class KoominGochi():
         self.p_var2 = DoubleVar()
 
         #배경화면 설정
-        self.back_image = tkinter.PhotoImage(file='image/back_home.png')
+        self.back_image = tkinter.PhotoImage(file='images/back_home.png')
         self.backimg = tkinter.Label(self.window, image=self.back_image)
         self.backimg.place(x=-2, y=-2)
+
+        # self.window.wm_attributes('-transparentcolor', "white")
 
 
 
@@ -64,11 +66,11 @@ class KoominGochi():
         button_sleep.place(x=260, y=720)
 
         #쿠민이 이미지
-        self.label = tkinter.Label(self.window, image=self.img.kookmin_image, bg= 'systemTransparent')
+        self.label = tkinter.Label(self.window, image=self.img.kookmin_image)
         self.label.place(x=self.img.x, y=self.img.y)
 
         #말풍선
-        self.text_image = tkinter.PhotoImage(file='image/messageBox.png')
+        self.text_image = tkinter.PhotoImage(file='images/messageBox.png')
         self.label2 = tkinter.Label(self.window, image=self.text_image)
         self.label2.place(x=140, y=400)
 

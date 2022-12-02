@@ -1,7 +1,7 @@
 import random
 from Day import day
 
-import gameAvoid, gameClick
+import minigame
 
 
 class Action():
@@ -16,8 +16,8 @@ class Action():
         self.money = 10000
         self.day = 1
 
-        self.avoidGameLauncher = gameAvoid.AvoidGame()
-        self.clickGameLauncher = gameClick.ClickGame()
+        self.avoidGameLauncher = minigame.AvoidGame()
+        self.clickGameLauncher = minigame.ClickGame()
 
     def goClub(self):
         if self.HP < 3:

@@ -1,8 +1,14 @@
-import tkinter
-import gameAvoid, gameClick
+# [게임이미지]
+# 배경 : 480*640(가로세로)
+# 캐릭터 : 50*50
+# 똥 : 50*50
+# 버튼 : 100*50
 
-avoidGame = gameAvoid.AvoidGame()
-clickGame = gameClick.ClickGame()
+import tkinter
+import minigame
+
+avoidGame = minigame.AvoidGame()
+clickGame = minigame.ClickGame()
 
 window = tkinter.Tk()
 score1 = tkinter.StringVar()
@@ -12,12 +18,12 @@ score2.set(str(clickGame.score))
 
 
 def playAvoidGame():
-    avoidGame.set()
+    avoidGame.set(70)
     score1.set(str(avoidGame.score))
 
 
 def playClickGame():
-    clickGame.set()
+    clickGame.set(70)
     score2.set(str(clickGame.score))
 
 
