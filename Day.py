@@ -9,7 +9,7 @@ class day():
             return ("Day %d" %self.date)
 
     def daypercent(self, day):
-        self.percent = day/40*100
+        self.percent = day/20*100
         return self.percent
 
 

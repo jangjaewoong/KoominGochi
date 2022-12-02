@@ -125,7 +125,7 @@ class Action():
             print("game over")
             self.gameover = False
             return self.gameover
-        elif self.day == 40:
+        elif self.day == 20:
             pass
         else:
             return self.gameover
