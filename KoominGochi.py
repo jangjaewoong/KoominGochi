@@ -2,6 +2,8 @@ import tkinter
 import tkinter.font
 from tkinter import*
 import random
+import pickle
+#from Save_Load import Save_Load
 
 from PyQt5.QtWidgets import QApplication
 
@@ -10,6 +12,7 @@ from Ending import ending
 from action import Action
 import midtermtest
 import sys
+from ifdie import ifdie
 
 class KoominGochi():
 
@@ -24,6 +27,7 @@ class KoominGochi():
         self.window.resizable(width=False, height=False)
         self.app = QApplication(sys.argv)
         self.test = midtermtest.MidTermTest(0)
+        #self.s = Save_Load()
 
         #장소 버튼들
         button_school = tkinter.Button(self.window, text='학교',width=8,height=2, fg="blue")
@@ -61,7 +65,11 @@ class KoominGochi():
         #말풍선
         text_image = tkinter.PhotoImage(file='messageBox.png')
         label2 = tkinter.Label(self.window, image=text_image)
-        label2.place(x=140, y=400)
+        label2.place(x=85, y=400)
+        font1 = tkinter.font.Font(size=16, weight="bold")
+        self.label3 = tkinter.Label(self.window, text="안녕하세요!", bg="white", compound="top", font=font1)
+
+        self.label3.place(x=130,y=445)
 
         #능력치 이름바[지능, 매력, 돈, 외로움, 스트레스, 체력]
         button_intellect = tkinter.Label(self.window, text='지능',width=6, height=1)
@@ -93,6 +101,8 @@ class KoominGochi():
         self.bar_hp.place(x=450, y=280)
 
 
+
+
         #날짜
         self.button_day = tkinter.Label(self.window, text="Day " + str(self.act.day), width=6)
         self.button_day.place(x=0, y=12)
@@ -105,28 +115,51 @@ class KoominGochi():
         self.ending = tkinter.Label(self.window, text="Ending.calu()", fg="pink", font=font)
         self.ending.pack(side='right')
         '''
+
+        #저장 불러오기 버튼
+        self.button_save = tkinter.Button(self.window, text="저장하기", width=6, command= lambda: self.btn_clicked('save'))
+        self.button_save.place(x=500, y=12)
+        self.button_load = tkinter.Button(self.window, text="불러오기", width=6, command= lambda: self.btn_clicked('load'))
+        self.button_load.place(x=500, y=48)
+
+
         self.window.mainloop()
 
     def btn_clicked(self, button):
         if button == 'lectureRoom':
-            #self.act.goClass()
-            self.test.show()
+            self.act.goClass()
+            #self.test.show()
+            self.label3["text"]=self.selecttext(0)
         elif button == 'club':
             self.act.goClub()
+            self.label3["text"] = self.selecttext(1)
         elif button == 'gym':
             self.act.goGym()
+            self.label3["text"] = self.selecttext(2)
         elif button == 'gs':
             self.act.goCU()
+            self.label3["text"] = self.selecttext(3)
         elif button == 'build':
             self.act.goNogada()
+            self.label3["text"] = self.selecttext(4)
         elif button == 'pc':
             self.act.goPC()
+            self.label3["text"] = self.selecttext(5)
         elif button == 'movie':
             self.act.goMovie()
+            self.label3["text"] = self.selecttext(6)
         elif button == 'shopping':
             self.act.goshop()
+            self.label3["text"] = self.selecttext(7)
         elif button == 'sleep':
             self.act.gosleep()
+            self.label3["text"] = self.selecttext(8)
+        elif button == 'save':
+            self.saving()
+            self.label3["text"] = "저장되었습니다!"
+        elif button == 'load':
+            self.loading()
+            self.label3["text"] = "게임 정보를 불러왔습니다.!"
 
 
         self.bar_hp['text'] = self.act.HP
@@ -138,7 +171,36 @@ class KoominGochi():
         self.button_day['text'] = "Day "+ str(self.act.day)
         self.bar_day['text'] = str(self.d.daypercent(self.act.day)) + "%"
 
+        if not self.act.Gameover():
+            self.app2 = QApplication(sys.argv)
+            self.dieWindow = ifdie()
+            self.dieWindow.show()
+            self.app2.exec_()
 
+
+    def saving(self):
+
+        savefile = [self.act.HP,self.act.int,self.act.char,self.act.str,self.act.lon,self.act.money,self.act.day]
+
+        with open("data.pickle", "wb") as file:
+            pickle.dump(savefile, file)
+
+
+    def loading(self):
+
+        with open("data.pickle", "rb") as file:
+            try:
+                data = pickle.load(file)
+            except EOFError:
+                pass
+
+            self.act.HP = data[0]
+            self.act.int = data[1]
+            self.act.char = data[2]
+            self.act.str = data[3]
+            self.act.lon = data[4]
+            self.act.money = data[5]
+            self.act.day = data[6]
 
 
 
@@ -146,6 +208,21 @@ class KoominGochi():
         self.kookmin_image = tkinter.PhotoImage(file='kookmin1.png')
         self.label = tkinter.Label(self.window, image=self.kookmin_image)
         self.label.place(x=140, y=170)
+
+    def selecttext(self, n):
+        cls_text=["안녕하세요!"]
+        club_text=["2"]
+        gym_text=["3"]
+        Cu_text=["4"]
+        gada_text=["5"]
+        Pc_text=["6"]
+        Mov_text=["7"]
+        shop_text=["8"]
+        sleep_text=["9"]
+        selText = [cls_text,club_text,gym_text,Cu_text,gada_text,Pc_text,
+                   Mov_text,shop_text,sleep_text]
+        return random.choice(selText[n])
+
 
 
 
