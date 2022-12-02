@@ -2,14 +2,15 @@ import tkinter
 import tkinter.font
 from tkinter import*
 import random
-
 from PyQt5.QtWidgets import QApplication
-
+from imageChoice import image
 from Day import day
+import tkinter.ttk
 from Ending import ending
 from action import Action
 import midtermtest
 import sys
+import time
 
 class KoominGochi():
 
@@ -18,12 +19,21 @@ class KoominGochi():
         self.d = day()
         self.act = Action()
         self.window = Tk()
+        self.img = image()
         self.window.title("KoominGochi")
         self.window.geometry("600x800")
         #window.configure(bg='white')
         self.window.resizable(width=False, height=False)
         self.app = QApplication(sys.argv)
         self.test = midtermtest.MidTermTest(0)
+        self.p_var2 = DoubleVar()
+
+        #배경화면 설정
+        self.back_image = tkinter.PhotoImage(file='image/back_home.png')
+        self.backimg = tkinter.Label(self.window, image=self.back_image)
+        self.backimg.place(x=-2, y=-2)
+
+
 
         #장소 버튼들
         button_school = tkinter.Button(self.window, text='학교',width=8,height=2, fg="blue")
@@ -54,14 +64,13 @@ class KoominGochi():
         button_sleep.place(x=260, y=720)
 
         #쿠민이 이미지
-        self.kookmin_image = tkinter.PhotoImage(file='sleep.png')
-        self.label = tkinter.Label(self.window, image=self.kookmin_image)
-        self.label.place(x=150, y=180)
+        self.label = tkinter.Label(self.window, image=self.img.kookmin_image, bg= 'systemTransparent')
+        self.label.place(x=self.img.x, y=self.img.y)
 
         #말풍선
-        text_image = tkinter.PhotoImage(file='messageBox.png')
-        label2 = tkinter.Label(self.window, image=text_image)
-        label2.place(x=140, y=400)
+        self.text_image = tkinter.PhotoImage(file='image/messageBox.png')
+        self.label2 = tkinter.Label(self.window, image=self.text_image)
+        self.label2.place(x=140, y=400)
 
         #능력치 이름바[지능, 매력, 돈, 외로움, 스트레스, 체력]
         button_intellect = tkinter.Label(self.window, text='지능',width=6, height=1)
@@ -99,6 +108,8 @@ class KoominGochi():
         #날짜 상태바
         self.bar_day = tkinter.Button(self.window, text=str(self.d.daypercent(self.act.day)) + "%", width=10, bg='green')
         self.bar_day.place(x=60, y=10)
+        #프로그래스바
+        self.progressbar = tkinter.ttk.Progressbar(self.window, maximum=100, length=150, variable=self.p_var2)
         '''
         # 엔딩 버튼 생성
         font = tkinter.font.Font(family='Consolas', size=100)
@@ -106,26 +117,53 @@ class KoominGochi():
         self.ending.pack(side='right')
         '''
         self.window.mainloop()
+    def progressbar_status(self):
+        self.progressbar = tkinter.ttk.Progressbar(self.window, maximum=100, length=150, variable=self.p_var2)
+        self.progressbar.place(x=225, y=295)
+        for i in range(1,101):
+            time.sleep(0.01)
+            self.p_var2.set(i)
+            self.progressbar.update()
+        self.progressbar.destroy()
 
+    #버튼 클릭 후 정보 UPdate!!
     def btn_clicked(self, button):
-        if button == 'lectureRoom':
-            self.act.goClass()
-        elif button == 'club':
+        if button == 'club':
             self.act.goClub()
+            self.img.imageOut('club')
+            self.progressbar_status()
+        elif button == 'lectureRoom':
+            self.act.goClass()
+            self.img.imageOut('lectureRoom')
+            self.progressbar_status()
         elif button == 'gym':
             self.act.goGym()
+            self.img.imageOut('gym')
+            self.progressbar_status()
         elif button == 'gs':
             self.act.goCU()
+            self.img.imageOut('gs')
+            self.progressbar_status()
         elif button == 'build':
             self.act.goNogada()
+            self.img.imageOut('build')
+            self.progressbar_status()
         elif button == 'pc':
             self.act.goPC()
+            self.img.imageOut('pc')
+            self.progressbar_status()
         elif button == 'movie':
             self.act.goMovie()
+            self.img.imageOut('movie')
+            self.progressbar_status()
         elif button == 'shopping':
             self.act.goshop()
+            self.img.imageOut('shopping')
+            self.progressbar_status()
         elif button == 'sleep':
             self.act.gosleep()
+            self.img.imageOut('sleep')
+            self.progressbar_status()
 
 
         self.bar_hp['text'] = self.act.HP
@@ -136,15 +174,9 @@ class KoominGochi():
         self.bar_stress['text'] = self.act.str
         self.button_day['text'] = "Day "+ str(self.act.day)
         self.bar_day['text'] = str(self.d.daypercent(self.act.day)) + "%"
+        self.label['image'] = self.img.kookmin_image
+        self.label.place(x=self.img.x, y=self.img.y)
 
-
-
-
-
-    def schoolWindow(self):
-        self.kookmin_image = tkinter.PhotoImage(file='kookmin1.png')
-        self.label = tkinter.Label(self.window, image=self.kookmin_image)
-        self.label.place(x=140, y=170)
 
 
 

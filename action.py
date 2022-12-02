@@ -80,6 +80,7 @@ class Action():
             self.money -= 1500
             self.lon -= 4
             self.str -= 4
+            self.int -= 10
 
     def goMovie(self):
         if self.HP < 3:
@@ -89,14 +90,16 @@ class Action():
             self.money -= 2000
             self.lon -= 5
             self.str -= 6
+            self.int -= 10
 
     def goshop(self):
         if self.HP < 3:
             return "체력이 부족합니다"
         else:
-            self.Hp -= 3
+            self.HP -= 3
             self.money -= 3000
-            self.cha += 7
+            self.char += 7
+            self.int -= 10
 
     def gosleep(self):
         self.HP=10
@@ -104,6 +107,7 @@ class Action():
         self.lon += 5
         self.char -= 5
         self.day += 1
+        self.int -= 5
         self.d.daypercent(self.day)
 
 
@@ -121,7 +125,7 @@ class Action():
             print("game over")
             self.gameover = False
             return self.gameover
-        elif day.day == 40:
+        elif self.day == 40:
             pass
         else:
             return self.gameover
