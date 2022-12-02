@@ -109,8 +109,7 @@ class KoominGochi():
 
     def btn_clicked(self, button):
         if button == 'lectureRoom':
-            #self.act.goClass()
-            self.test.show()
+            self.act.goClass()
         elif button == 'club':
             self.act.goClub()
         elif button == 'gym':

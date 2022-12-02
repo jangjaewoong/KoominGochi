@@ -1,5 +1,8 @@
-
+import random
 from Day import day
+
+import gameAvoid, gameClick
+
 
 class Action():
 
@@ -12,6 +15,10 @@ class Action():
         self.str = 50
         self.money = 10000
         self.day = 1
+
+        self.avoidGameLauncher = gameAvoid.AvoidGame()
+        self.clickGameLauncher = gameClick.ClickGame()
+
     def goClub(self):
         if self.HP < 3:
             return "체력이 부족합니다"
@@ -23,12 +30,17 @@ class Action():
 
     def goClass(self):
         #게임 불러오기
-        print(self.HP)
-
         if self.HP < 3:
             return "체력이 부족합니다"
         else:
-            self.int += 5 #게임점수 계산
+            gameChoice = random.randint(0, 2)
+            if gameChoice == 0:
+                self.avoidGameLauncher.set(self.int)
+                self.int += self.avoidGameLauncher.score // 4
+            elif gameChoice == 1:
+                self.clickGameLauncher.set(self.int)
+                self.int += self.clickGameLauncher.score // 20
+            # self.int += 5 #게임점수 계산
             self.str += 7
             self.lon += 7
             self.HP -= 3
