@@ -3,19 +3,19 @@ import tkinter.ttk
 from tkinter import *
 import random
 import pickle
-from PyQt5.QtWidgets import QApplication
+
 from imageChoice import image
 from Day import day
-from questions import cls_text, club_text, gym_text,\
-                      Cu_text, gada_text, Pc_text, Mov_text, shop_text, sleep_text
+from questions import cls_text, club_text, gym_text, \
+    Cu_text, gada_text, Pc_text, Mov_text, shop_text, sleep_text
 import tkinter.ttk
 from Ending import ending
 from action import Action
-import midtermtest
-import sys
 import time
-from ifdie import ifdie
+
 from PIL import Image, ImageTk
+
+import ctypes
 
 
 class KoominGochi():
@@ -38,8 +38,6 @@ class KoominGochi():
                          darkcolor='green', thickness=10)
         # window.configure(bg='white')
         self.window.resizable(width=False, height=False)
-        self.app = QApplication(sys.argv)
-        self.test = midtermtest.MidTermTest(0)
 
         self.p_var2 = DoubleVar()
         # 프레임 설정
@@ -51,9 +49,9 @@ class KoominGochi():
 
         # 배경화면 설정
         self.image = Image.open('images/back_home.png')
-        self.image_resize = self.image.resize((1200,1600))
+        self.image_resize = self.image.resize((1200, 1600))
         self.back_image = ImageTk.PhotoImage(self.image_resize)
-        self.canvas.create_image(0,0,image = self.back_image)
+        self.canvas.create_image(0, 0, image=self.back_image)
         # self.backimg = tkinter.Label(self.window, image=self.back_image)
         # self.backimg.place(x=-2, y=-2)
 
@@ -99,12 +97,12 @@ class KoominGochi():
         # 쿠민이 이미지
         # self.label = tkinter.Label(self.window, image=self.img.kookmin_image)
         # self.label.place(x=self.img.x, y=self.img.y)
-        self.canvas.create_image(300, 310, image=self.img.kookmin_image,tags='kookmin image')
+        self.canvas.create_image(300, 310, image=self.img.kookmin_image, tags='kookmin image')
 
         # 말풍선
 
         self.text_image = ImageTk.PhotoImage(Image.open('messageBox.png'))
-        self.canvas.create_image(300,455,image = self.text_image)
+        self.canvas.create_image(300, 455, image=self.text_image)
         # label2 = tkinter.Label(self.window, image=text_image)
         # label2.place(x=85, y=400)
         font1 = tkinter.font.Font(size=16, weight="bold")
@@ -132,16 +130,16 @@ class KoominGochi():
         self.intellect = IntVar()
         self.intellect.set(50)
         self.bar_intellect = tkinter.ttk.Progressbar(self.window, maximum=100, orient='horizontal',
-                                                     length=150, style='Pink.Horizontal.TProgressbar'
-                                                     , variable=self.intellect)
+                                                     length=150, style='Pink.Horizontal.TProgressbar',
+                                                     variable=self.intellect)
         self.bar_intellect.place(x=60, y=100)
         # self.bar_charm = tkinter.Button(self.window, text=self.act.char, width=6, bg='green')
         # self.bar_charm.place(x=60, y=130)
         self.charm = IntVar()
         self.charm.set(50)
         self.bar_charm = tkinter.ttk.Progressbar(self.window, maximum=100, orient='horizontal',
-                                                 length=150, style='Pink.Horizontal.TProgressbar'
-                                                 , variable=self.charm)
+                                                 length=150, style='Pink.Horizontal.TProgressbar',
+                                                 variable=self.charm)
         self.bar_charm.place(x=60, y=130)
 
         self.bar_money = tkinter.Button(self.window, text=self.act.money, width=10, bg='green')
@@ -196,11 +194,18 @@ class KoominGochi():
     def progressbar_status(self):
         self.progressbar = tkinter.ttk.Progressbar(self.window, maximum=100, length=150, variable=self.p_var2)
         self.progressbar.place(x=225, y=295)
+        buttons = [self.button_gs, self.button_gym, self.button_movie, self.button_pc, self.button_club,
+                   self.button_shopping, self.button_lectureRoom, self.button_build, self.button_sleep,
+                   self.button_load, self.button_save]
+        for button in buttons:
+            button["state"] = DISABLED
         for i in range(1, 101):
             time.sleep(0.01)
             self.p_var2.set(i)
             self.progressbar.update()
         self.progressbar.destroy()
+        for button in buttons:
+            button["state"] = NORMAL
 
     # 버튼 클릭 후 정보 UPdate!!
     def btn_clicked(self, button):
@@ -210,7 +215,17 @@ class KoominGochi():
             self.progressbar_status()
             self.label3["text"] = self.selecttext(0)
         elif button == 'lectureRoom':
-            self.act.goClass()
+            if self.act.day == 10 or self.act.day == 20:
+                if self.act.int < 50:
+                    self.act.Test(2)
+                elif self.act.int < 80:
+                    self.act.Test(1)
+                else:
+                    self.act.Test(0)
+                self.button_sleep["state"] = NORMAL
+                print(self.act.midtestscore)
+            else:
+                self.act.goClass()
             self.img.imageOut('lectureRoom')
             self.progressbar_status()
             self.label3["text"] = self.selecttext(1)
@@ -250,7 +265,10 @@ class KoominGochi():
             self.act.gosleep()
             self.img.imageOut('sleep')
             self.progressbar_status()
-            self.label3["text"] = self.selecttext(8)
+            if self.act.day == 10 or self.act.day == 20:
+                self.label3["text"] = "오늘은 시험 보는 날! 화이팅!"
+            else:
+                self.label3["text"] = self.selecttext(8)
 
         elif button == 'save':
             self.saving()
@@ -267,18 +285,16 @@ class KoominGochi():
         self.stress.set(self.act.str)
         self.button_day['text'] = "Day " + str(self.act.day)
         self.day.set(self.d.daypercent(self.act.day))
-        self.canvas.create_image(300, 310, image=self.img.kookmin_image,tags='kookmin image')
+        self.canvas.create_image(300, 310, image=self.img.kookmin_image, tags='kookmin image')
         self.no_HP()
 
         if not self.act.Gameover():
-            self.app2 = QApplication(sys.argv)
-            self.dieWindow = ifdie()
-            self.dieWindow.show()
-            self.app2.exec_()
+            pass
 
     def saving(self):
 
-        savefile = [self.act.HP, self.act.int, self.act.char, self.act.str, self.act.lon, self.act.money, self.act.day]
+        savefile = [self.act.HP, self.act.int, self.act.char, self.act.str, self.act.lon, self.act.money, self.act.day,
+                    self.act.midtestscore]
 
         with open("data.pickle", "wb") as file:
             pickle.dump(savefile, file)
@@ -298,6 +314,7 @@ class KoominGochi():
             self.act.lon = data[4]
             self.act.money = data[5]
             self.act.day = data[6]
+            self.act.midtestscore = data[7]
 
     def schoolWindow(self):
         self.kookmin_image = tkinter.PhotoImage(file='kookmin1.png')
@@ -312,25 +329,31 @@ class KoominGochi():
 
     def no_HP(self):
         cost_2 = [self.button_gs, self.button_gym]
-        cost_3 = [self.button_movie, self.button_pc, self.button_club
-            , self.button_shopping, self.button_lectureRoom]
+        cost_3 = [self.button_movie, self.button_pc, self.button_club,
+                  self.button_shopping, self.button_lectureRoom]
         cost_7 = [self.button_build]
         all_buttons = cost_2 + cost_3 + cost_7
         if self.act.HP < 7:
             for i in cost_7:
-                i["state"] = tkinter.DISABLED
+                i["state"] = DISABLED
 
         if self.act.HP < 3:
             for i in cost_3:
-                i["state"] = tkinter.DISABLED
+                i["state"] = DISABLED
         if self.act.HP < 2:
             for i in cost_2:
-                i["state"] = tkinter.DISABLED
+                i["state"] = DISABLED
         if self.act.HP == 10:
             for i in all_buttons:
-                i["state"] = tkinter.NORMAL
+                i["state"] = NORMAL
+
+        if (self.act.day == 10 or self.act.day == 20) and self.act.HP == 10:
+            for i in all_buttons:
+                i["state"] = DISABLED
+            self.button_sleep["state"] = DISABLED
+            self.button_lectureRoom["state"] = NORMAL
 
 
 if __name__ == "__main__":
+    ctypes.windll.shcore.SetProcessDpiAwareness(1)
     game = KoominGochi()
-    sys.exit(game.app.exec_())

@@ -1,6 +1,8 @@
 import random
 from Day import day
-
+import sys
+from PyQt5.QtWidgets import QApplication
+import midtermtest
 import minigame
 
 
@@ -15,6 +17,7 @@ class Action():
         self.str = 50
         self.money = 10000
         self.day = 1
+        self.midtestscore = 0
 
         self.avoidGameLauncher = minigame.AvoidGame()
         self.clickGameLauncher = minigame.ClickGame()
@@ -102,13 +105,20 @@ class Action():
             self.int -= 10
 
     def gosleep(self):
-        self.HP=10
+        self.HP = 10
         self.money -= 1000
         self.lon += 5
         self.char -= 5
         self.day += 1
         self.int -= 5
         self.d.daypercent(self.day)
+
+    def Test(self, difficulty):
+        app = QApplication(sys.argv)
+        test = midtermtest.MidTermTest(difficulty)
+        test.show()
+        app.exec_()
+        self.HP = 0
 
 
     def Gameover(self):

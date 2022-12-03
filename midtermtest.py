@@ -3,7 +3,6 @@ from PyQt5.QtCore import QCoreApplication
 
 from questions import examList
 
-from testscore import TestScore
 
 class MidTermTest(QWidget):
 
@@ -11,14 +10,12 @@ class MidTermTest(QWidget):
         for i in range(self.questionsNumber):
             userInput = self.answerInputs[i].text()
             if userInput == self.examPaper[self.examQuestionList[i]]:
-                TestScore.score += 1
-        print(TestScore.score)
+                self.score += 1
         QCoreApplication.instance().quit()
-
-
 
     def __init__(self, difficulty, parent=None):
         super().__init__(parent)
+        self.score = 0
         self.examPaper = examList[difficulty]
         self.examQuestionList = list(self.examPaper.keys())
         self.questionsNumber = len(self.examPaper)
