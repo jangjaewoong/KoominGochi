@@ -36,7 +36,7 @@ class Action():
         if self.HP < 3:
             return "체력이 부족합니다"
         else:
-            gameChoice = random.randint(0, 2)
+            gameChoice = random.randint(0, 1)
             if gameChoice == 0:
                 self.avoidGameLauncher.set(self.int)
                 self.int += self.avoidGameLauncher.score // 4
