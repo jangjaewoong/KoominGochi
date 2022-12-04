@@ -4,6 +4,7 @@ from PyQt5.QtCore import QCoreApplication
 from questions import examList
 
 
+
 class MidTermTest(QWidget):
 
     def buttonClicked(self):
@@ -11,6 +12,7 @@ class MidTermTest(QWidget):
             userInput = self.answerInputs[i].text()
             if userInput == self.examPaper[self.examQuestionList[i]]:
                 self.score += 1
+
         QCoreApplication.instance().quit()
 
     def __init__(self, difficulty, parent=None):
@@ -35,6 +37,7 @@ class MidTermTest(QWidget):
         for answer in self.answerInputs:
             examLayout.addWidget(answer, c, 1)
             c += 1
+
 
         self.submitButton = QToolButton()
         self.submitButton.setText("Submit!")

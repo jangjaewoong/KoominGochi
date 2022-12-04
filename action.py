@@ -114,10 +114,13 @@ class Action():
         self.d.daypercent(self.day)
 
     def Test(self, difficulty):
+
         app = QApplication(sys.argv)
         test = midtermtest.MidTermTest(difficulty)
         test.show()
         app.exec_()
+
+        self.midtestscore = test.score
         self.HP = 0
 
 
@@ -135,7 +138,7 @@ class Action():
             print("game over")
             self.gameover = False
             return self.gameover
-        elif self.day == 20:
+        elif self.day == 22:
             pass
         else:
             return self.gameover

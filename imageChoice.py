@@ -16,10 +16,10 @@ class image:
             self.kookmin_image = ImageTk.PhotoImage(Image.open('images/sleep.png'))
             self.x = 160
         elif btn == 'lectureRoom':
-            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/class.png'))
+            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/k_class.png'))
             self.x = 200
         elif btn == 'gym':
-            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/health.png'))
+            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/k_health.png'))
             self.x = 200
         elif btn == 'gs':
             self.kookmin_image = ImageTk.PhotoImage(Image.open('images/gs.png'))
@@ -28,13 +28,13 @@ class image:
             self.kookmin_image = ImageTk.PhotoImage(Image.open('images/build.png'))
             self.x = 210
         elif btn == 'pc':
-            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/pc.png'))
+            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/k_pc.png'))
             self.x = 140
         elif btn == 'movie':
-            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/movie.png'))
+            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/k_movie.png'))
             self.x = 200
         elif btn == 'shopping':
-            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/shopping.png'))
+            self.kookmin_image = ImageTk.PhotoImage(Image.open('images/k_shopping.png'))
             self.x = 220
 
 
