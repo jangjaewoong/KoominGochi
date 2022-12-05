@@ -19,6 +19,8 @@ from PIL import Image, ImageTk
 
 import ctypes
 
+import sys
+
 
 class KoominGochi():
 
@@ -294,6 +296,20 @@ class KoominGochi():
             self.img.imageOut('sleep')
             self.progressbar_status()
             self.setBg(8)
+            if self.act.koosoon:
+
+                self.act.lon -= 5
+                self.act.HP -= 3
+                self.act.money -= 1000
+            if self.act.Koosoon():
+                self.gobaek()
+
+            else :
+                if self.act.breakout():
+                    self.kick()
+
+
+
             if self.act.day == 10 or self.act.day == 20:
                 self.label3["text"] = "오늘은 시험 보는 날! 화이팅!"
             else:
@@ -312,6 +328,19 @@ class KoominGochi():
             self.quit()
         elif button == "detail":
             self.detailButton()
+        elif button == "accept":
+            self.act.koosoon = True
+
+            self.hide_girf()
+            self.label3["text"] = "쿠순이랑 사귀다니.. 꿈이 아닐까?"
+            self.button_couple = tkinter.Button(self.window, text="커플", width=6,bg='pink')
+            self.button_couple.place(x=470, y=210)
+
+        elif button == "refuse":
+            self.act.koosoon = False
+            self.hide_girf()
+
+            self.label3["text"] = "지금은 학업에 집중할때야.."
 
 
 
@@ -334,7 +363,7 @@ class KoominGochi():
             self.reLabel = tkinter.Label(self.window, width=50, height=30)
             self.reLabel.place(x=70, y=120)
 
-            reKoomin = tkinter.PhotoImage(file='../../Desktop/소프/KoominGochi/REkoomin.png')
+            reKoomin = tkinter.PhotoImage(file='REkoomin.png')
 
             self.REKo = tkinter.Label(self.window, image=reKoomin)
             self.REKo.place(x=150, y=175)
@@ -358,6 +387,45 @@ class KoominGochi():
             else :
                 self.setEnding(2)
 
+
+    def gobaek(self):
+        self.reLabel = tkinter.Label(self.window, width=50, height=30)
+        self.reLabel.place(x=70, y=120)
+
+        reKoomin = tkinter.PhotoImage(file='REkoomin.png')
+
+        self.REKo = tkinter.Label(self.window, image=reKoomin)
+        self.REKo.place(x=150, y=175)
+        self.REKo.image = reKoomin
+
+        self.reButton = tkinter.Button(self.window, text='수락하기', width=20, height=3,
+                                       command=lambda: self.btn_clicked("accept"))
+        self.reButton.place(x=100, y=600)
+        self.quitButton = tkinter.Button(self.window, text='거절하기', width=20, height=3,
+                                         command=lambda: self.btn_clicked("refuse"))
+        self.quitButton.place(x=315, y=600)
+        font2 = tkinter.font.Font(size=16, weight="bold")
+        self.reText = tkinter.Label(self.window, text="널 좋아해..", font=font2, width=20, height=3)
+        self.reText.place(x=130, y=490)
+
+    def kick(self):
+        self.button_couple.place_forget()
+        self.reLabel = tkinter.Label(self.window, width=50, height=30)
+        self.reLabel.place(x=70, y=120)
+
+        reKoomin = tkinter.PhotoImage(file='REkoomin.png')
+
+        self.REKo = tkinter.Label(self.window, image=reKoomin)
+        self.REKo.place(x=150, y=175)
+        self.REKo.image = reKoomin
+
+        self.quitButton = tkinter.Button(self.window, text='창 닫기', width=20, height=3,
+                                         command=lambda: self.btn_clicked("refuse"))
+        self.quitButton.place(x=315, y=600)
+        font2 = tkinter.font.Font(size=16, weight="bold")
+        self.reText = tkinter.Label(self.window, text="헤어지자..", font=font2, width=20, height=3)
+        self.reText.place(x=130, y=490)
+        self.act.koosoon = False
     def detailButton(self):
         self.reLabel = tkinter.Label(self.window, width=50, height=20)
         self.reLabel.place(x=70, y=120)
@@ -376,10 +444,15 @@ class KoominGochi():
                                                       "▶ 시험 점수와 지능 수치에 따라 \n"
                                                       "진로가 결정됩니다.", font=font2, width=35, height=10)
         self.reText.place(x=78, y=130)
+    def hide_girf(self):
+        self.reButton.place_forget()
+        self.reLabel.place_forget()
+        self.quitButton.place_forget()
+        self.reText.place_forget()
+        self.REKo.place_forget()
 
     def hide_detail(self):
             self.reLabel.place_forget()
-
             self.quitButton.place_forget()
             self.reText.place_forget()
     def setEnding(self,n):
@@ -432,10 +505,7 @@ class KoominGochi():
 
 
     def quit(self):
-        self.reLabel.place_forget()
-        self.reButton.place_forget()
-        self.quitButton.place_forget()
-        self.window.destroy()
+        sys.exit(0)
 
     def saving(self):
 

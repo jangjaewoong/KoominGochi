@@ -18,6 +18,8 @@ class Action():
         self.money = 10000
         self.day = 1
         self.midtestscore = 0
+        self.koosoon = False
+        self.a = 1
 
         self.avoidGameLauncher = minigame.AvoidGame()
         self.clickGameLauncher = minigame.ClickGame()
@@ -26,6 +28,7 @@ class Action():
         if self.HP < 3:
             return "체력이 부족합니다"
         else:
+
             self.str -= 5
             self.HP -= 3
             self.lon -= 5
@@ -54,11 +57,16 @@ class Action():
         if self.HP < 2:
             return "체력이 부족합니다"
         else:
-            self.HP -= 2
-            self.lon += 5
-            self.money-= 1000
-            self.char +=5
-
+            if self.koosoon:
+                self.HP -= 2
+                self.lon += 2
+                self.money-= 1000
+                self.char +=5
+            else:
+                self.HP -= 2
+                self.lon += 5
+                self.money-= 1000
+                self.char +=5
     def goCU(self):
         if self.HP < 3:
             return "체력이 부족합니다"
@@ -105,6 +113,7 @@ class Action():
             self.int -= 10
 
     def gosleep(self):
+
         self.HP = 10
         self.money -= 1000
         self.lon += 5
@@ -122,6 +131,23 @@ class Action():
 
         self.midtestscore = test.score
         self.HP = 0
+
+
+
+    def Koosoon(self):
+
+
+        if self.char > 70 and self.a==1:
+            self.a -=1
+            return True
+        else :
+            return False
+    def breakout(self):
+        if self.char < 60 and self.a==0:
+            self.a -=1
+            return True
+        else :
+            return False
 
 
     def Gameover(self):
